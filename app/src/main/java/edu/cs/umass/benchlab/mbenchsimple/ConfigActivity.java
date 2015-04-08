@@ -10,7 +10,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
 import com.example.mbenchsimple.R;
+
 import android.net.*;
 import android.net.wifi.WifiManager;
 import android.content.Context;
@@ -20,10 +22,12 @@ import android.content.Context;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.BufferedReader;
+
 public class ConfigActivity extends ActionBarActivity {
 
     private Button start;
@@ -34,11 +38,10 @@ public class ConfigActivity extends ActionBarActivity {
     private void loadExperiments() {
         try {
             File trace = new File(GlobalConstants.getBenchlabDirName() + "trace.txt");
-            if(trace.exists()) {
+            if (trace.exists()) {
                 ExperimentList ex = ExperimentList.getInstance(GlobalConstants.getBenchlabDirName() + "trace.txt");
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -108,13 +111,13 @@ public class ConfigActivity extends ActionBarActivity {
 
     private String getLocation() {
 
-        if(isGPSEnabled()) {
+        if (isGPSEnabled()) {
             LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
             Criteria criteria = new Criteria();
             String provider = locationManager.getBestProvider(criteria, false);
             Location location = locationManager.getLastKnownLocation(provider);
 
-            if(location != null) {
+            if (location != null) {
                 return location.getLatitude() + "," + location.getLongitude();
             }
 
@@ -130,7 +133,7 @@ public class ConfigActivity extends ActionBarActivity {
         boolean enabled = service
                 .isProviderEnabled(LocationManager.GPS_PROVIDER);
 
-        if(!enabled) {
+        if (!enabled) {
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
                     getApplicationContext());
             alertDialogBuilder
@@ -153,7 +156,7 @@ public class ConfigActivity extends ActionBarActivity {
                     });
         }
 
-         enabled = service
+        enabled = service
                 .isProviderEnabled(LocationManager.GPS_PROVIDER);
         return enabled;
 
@@ -171,7 +174,7 @@ public class ConfigActivity extends ActionBarActivity {
     }
 
     private String intToIp(int addr) {
-        return  ((addr & 0xFF) + "." +
+        return ((addr & 0xFF) + "." +
                 ((addr >>>= 8) & 0xFF) + "." +
                 ((addr >>>= 8) & 0xFF) + "." +
                 ((addr >>>= 8) & 0xFF));

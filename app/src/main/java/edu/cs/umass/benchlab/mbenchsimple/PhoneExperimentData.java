@@ -21,18 +21,15 @@ public class PhoneExperimentData {
         this.ipAddress = data;
     }
 
-    public String getVersion()
-    {
+    public String getVersion() {
         return this.version;
     }
 
-    public String getLocation()
-    {
+    public String getLocation() {
         return this.location;
     }
 
-    public String getIpAddress()
-    {
+    public String getIpAddress() {
         return this.ipAddress;
     }
 }

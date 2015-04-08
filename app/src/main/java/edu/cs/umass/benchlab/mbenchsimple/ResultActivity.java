@@ -6,7 +6,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.LinkedList;
+import java.security.spec.X509EncodedKeySpec;
 
 import com.example.mbenchsimple.R;
 import com.loopj.android.http.RequestParams;
@@ -25,17 +29,20 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
+import java.io.FileInputStream;
+import java.security.KeyPair;
+import javax.crypto.Cipher;
+import javax.crypto.CipherOutputStream;
+import javax.crypto.NoSuchPaddingException;
+
+import java.security.KeyFactory;
+import java.security.PublicKey;
 
 public class ResultActivity extends Activity {
 
     private Button exit;
 
-    public String getDeviceUuid() {
-        return Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
-    }
-
-    private void uploadFile()
-    {
+    private void uploadFile() {
         Toast.makeText(getApplicationContext(), "Uploading results", Toast.LENGTH_SHORT).show();
         String zipfilename = GlobalConstants.getInstance().getBenchlabDirName() +
                 GlobalConstants.getExperimentName() + ".zip";
@@ -45,14 +52,61 @@ public class ResultActivity extends Activity {
         uploadZipToWebApp(zipfilename);
     }
 
+    private File encodeFile(File zipfile) {
+        File outfile = new File(GlobalConstants.getDirName() + "encfile");
+        File publicKeyFile = new File(GlobalConstants.getInstance().getBenchlabDirName() + "id_rsa.pub");
+        byte[] encodedKey = new byte[(int)publicKeyFile.length()];
+        try {
+            new FileInputStream(publicKeyFile).read(encodedKey);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // create public key
+        try {
+            X509EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(encodedKey);
+            KeyFactory kf = KeyFactory.getInstance("RSA");
+            PublicKey pk = kf.generatePublic(publicKeySpec);
+
+            Cipher pkCipher = Cipher.getInstance("RSA");
+            pkCipher.init(Cipher.ENCRYPT_MODE, pk);
+            CipherOutputStream os = new CipherOutputStream(new FileOutputStream(outfile), pkCipher);
+            byte[] data = new byte[(int)zipfile.length()];
+            os.write(new FileInputStream(zipfile).read(data));
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (InvalidKeySpecException e) {
+            e.printStackTrace();
+        } catch (NoSuchPaddingException e) {
+            e.printStackTrace();
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return outfile;
+    }
     private void uploadZipToWebApp(String zipfilename) {
         //zipfilename = GlobalConstants.getInstance().getDirName() +  "results.csv";
         File zipfile = new File(zipfilename);
+        File encodedFile = encodeFile(zipfile);
         RequestParams params = new RequestParams();
+
+        params.put("deviceid", GlobalConstants.getConstantDeviceID());
+        params.put("os", ExperimentResults.getInstance().getPhoneData().getVersion());
+        params.put("location", ExperimentResults.getInstance().getPhoneData().getLocation());
+        params.put("ip", ExperimentResults.getInstance().getPhoneData().getIpAddress());
+
+        WebAppCalls.invokeWebapp_GET(getApplicationContext(), params,
+                GlobalConstants.PATH_UPLOAD_METADATA);
+
+
+        params = new RequestParams();
         try {
-            params.put("result_zip", zipfile, "multipart/form-data");
-        }
-        catch(FileNotFoundException ex) {
+            params.put("result_zip", encodedFile, "multipart/form-data");
+
+        } catch (FileNotFoundException ex) {
             ex.printStackTrace();
         }
 
@@ -64,92 +118,87 @@ public class ResultActivity extends Activity {
 
     }
 
-	private void makeFile(LinkedList<ResultEntity> results)
-	{
-		 
-		String filename = GlobalConstants.getInstance().getDirName() +  "results.csv";
-		File file = new File(filename);
+    private void makeFile(LinkedList<ResultEntity> results) {
 
-		try
-		{
-			OutputStream op = new FileOutputStream(file);
-			OutputStreamWriter outputStreamWriter = new OutputStreamWriter(op);
+        String filename = GlobalConstants.getInstance().getDirName() + "results.csv";
+        File file = new File(filename);
+
+        try {
+            OutputStream op = new FileOutputStream(file);
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(op);
 
 
-			for(ResultEntity res: results)
-			{
-				outputStreamWriter.write(res.getTag() + "," + res.getLatency() + "\n");
+            for (ResultEntity res : results) {
+                outputStreamWriter.write(res.getTag() + "," + res.getLatency() + "\n");
 
-			}
-			outputStreamWriter.close();
-		}
-		catch(IOException ex)
-		{
+            }
+            outputStreamWriter.close();
+        } catch (IOException ex) {
 
-		}
-	}
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_result);
-		ExperimentResults inst = ExperimentResults.getInstance();
-		LinkedList<ResultEntity> results = inst.getResults();
+        }
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_result);
+        ExperimentResults inst = ExperimentResults.getInstance();
+        LinkedList<ResultEntity> results = inst.getResults();
 
 
 		/*Table stuff*/
-		TableLayout table = new TableLayout(this); 
-		table.setStretchAllColumns(true);  
-		table.setShrinkAllColumns(true);  
-		TableRow tableTitle = new TableRow(this);  
-		tableTitle.setGravity(Gravity.CENTER_HORIZONTAL);
+        TableLayout table = new TableLayout(this);
+        table.setStretchAllColumns(true);
+        table.setShrinkAllColumns(true);
+        TableRow tableTitle = new TableRow(this);
+        tableTitle.setGravity(Gravity.CENTER_HORIZONTAL);
 
 		/*Add a title*/
-		TextView title = new TextView(this);  
-		title.setText("Latency results");  
-		title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);  
-		title.setGravity(Gravity.CENTER);  
-		title.setBackgroundColor(color.darker_gray);
-		tableTitle.addView(title, new TableRow.LayoutParams(0, LayoutParams.WRAP_CONTENT, (float)0.50));
-		table.addView(tableTitle);
+        TextView title = new TextView(this);
+        title.setText("Latency results");
+        title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
+        title.setGravity(Gravity.CENTER);
+        title.setBackgroundColor(color.darker_gray);
+        tableTitle.addView(title, new TableRow.LayoutParams(0, LayoutParams.WRAP_CONTENT, (float) 0.50));
+        table.addView(tableTitle);
 
 
 		/*Now the site and latency labels*/
-		TableRow rowTitle = new TableRow(this);  
-		rowTitle.setGravity(Gravity.CENTER_HORIZONTAL);
+        TableRow rowTitle = new TableRow(this);
+        rowTitle.setGravity(Gravity.CENTER_HORIZONTAL);
 
-		TextView siteName = new TextView(this);  
-		siteName.setText("Web site");  
-		siteName.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);  
-		siteName.setGravity(Gravity.CENTER_HORIZONTAL);  
-		rowTitle.addView(siteName);
+        TextView siteName = new TextView(this);
+        siteName.setText("Web site");
+        siteName.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+        siteName.setGravity(Gravity.CENTER_HORIZONTAL);
+        rowTitle.addView(siteName);
 
-		TextView latency = new TextView(this);  
-		latency.setText("Latency in ms");  
-		latency.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);  
-		latency.setGravity(Gravity.CENTER_HORIZONTAL);  
-		rowTitle.addView(latency);
+        TextView latency = new TextView(this);
+        latency.setText("Latency in ms");
+        latency.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+        latency.setGravity(Gravity.CENTER_HORIZONTAL);
+        rowTitle.addView(latency);
 
-		table.addView(rowTitle);
+        table.addView(rowTitle);
 
-		for(ResultEntity res: results)
-		{
-			TableRow row = new TableRow(this); 
-			row.setGravity(Gravity.CENTER);
+        for (ResultEntity res : results) {
+            TableRow row = new TableRow(this);
+            row.setGravity(Gravity.CENTER);
 
-			TextView rowSite = new TextView(this);  
-			rowSite.setText(res.getTag());  
-			rowSite.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);  
-			rowSite.setGravity(Gravity.CENTER_HORIZONTAL);  
-			row.addView(rowSite);
+            TextView rowSite = new TextView(this);
+            rowSite.setText(res.getTag());
+            rowSite.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+            rowSite.setGravity(Gravity.CENTER_HORIZONTAL);
+            row.addView(rowSite);
 
-			TextView rowLatency = new TextView(this);  
-			rowLatency.setText(res.getLatency() + "");  
-			rowLatency.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);  
-			rowLatency.setGravity(Gravity.CENTER_HORIZONTAL);  
-			row.addView(rowLatency);
+            TextView rowLatency = new TextView(this);
+            rowLatency.setText(res.getLatency() + "");
+            rowLatency.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+            rowLatency.setGravity(Gravity.CENTER_HORIZONTAL);
+            row.addView(rowLatency);
 
-			table.addView(row);
-		}
+            table.addView(row);
+        }
 
         TableRow exitRow = new TableRow(this);
         exitRow.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -168,7 +217,7 @@ public class ResultActivity extends Activity {
         row.addView(uploadResults);
         table.addView(row);*/
 
-		setContentView(table);
+        setContentView(table);
 
         makeFile(results);
         uploadFile();
@@ -191,5 +240,5 @@ public class ResultActivity extends Activity {
 
             }
         });
-	}
+    }
 }

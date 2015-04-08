@@ -14,6 +14,7 @@ public class ErrorMessage {
     public ErrorMessage() {
         status = Status.FAILURE;
     }
+
     public ErrorMessage(Status status, String message) {
         this.message = message;
         this.status = status;
@@ -24,10 +25,9 @@ public class ErrorMessage {
     }
 
     public boolean getStatusBoolean() {
-        if(status == Status.SUCCESS) {
+        if (status == Status.SUCCESS) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }

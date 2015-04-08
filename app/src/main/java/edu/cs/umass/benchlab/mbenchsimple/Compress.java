@@ -1,6 +1,7 @@
 package edu.cs.umass.benchlab.mbenchsimple;
 
 import android.util.Log;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.FileInputStream;
@@ -23,14 +24,12 @@ public class Compress {
     private LinkedList<String> getAllFiles(File directory) {
         LinkedList<String> filenames = new LinkedList<String>();
 
-        if(directory.isDirectory())
-        {
+        if (directory.isDirectory()) {
             File[] fileList = directory.listFiles();
-            for(File file : fileList) {
-                if(file.isDirectory()) {
-                   filenames.addAll(getAllFiles(file));
-                }
-                else if(file.isFile()) {
+            for (File file : fileList) {
+                if (file.isDirectory()) {
+                    filenames.addAll(getAllFiles(file));
+                } else if (file.isFile()) {
                     filenames.add(file.getAbsolutePath());
                 }
             }
@@ -39,8 +38,7 @@ public class Compress {
         return filenames;
     }
 
-    public void zipDirectory(String dirName, String zipFile)
-    {
+    public void zipDirectory(String dirName, String zipFile) {
         _zipFile = zipFile;
         File directory = new File(dirName);
         _files = getAllFiles(directory);
@@ -49,7 +47,7 @@ public class Compress {
     }
 
     private void zip() {
-        try  {
+        try {
             BufferedInputStream origin = null;
             FileOutputStream dest = new FileOutputStream(_zipFile);
 
@@ -57,7 +55,7 @@ public class Compress {
 
             byte data[] = new byte[BUFFER];
 
-            for(String f : _files) {
+            for (String f : _files) {
                 Log.v("Compress", "Adding: " + f);
                 FileInputStream fi = new FileInputStream(f);
                 origin = new BufferedInputStream(fi, BUFFER);
@@ -71,7 +69,7 @@ public class Compress {
             }
 
             out.close();
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
