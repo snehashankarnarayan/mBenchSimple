@@ -7,6 +7,7 @@ public class ResultEntity {
     private long start;
     private long end;
     private long latency;
+    private long bytes;
 
     public void setUrl(String url) {
         this.url = url;
@@ -24,6 +25,10 @@ public class ResultEntity {
         this.end = end;
         this.latency = (this.end - this.start);
     }
+
+    public void setBytes(long b) { this.bytes = b; }
+
+    public long getBytes() { return bytes; }
 
     public String getURL() {
         return this.url;

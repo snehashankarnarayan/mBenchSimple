@@ -80,6 +80,7 @@ public class RegisterActivity extends ActionBarActivity {
         params.put("deviceid", generateDeviceUuid());
         params.put("devicename", Build.MODEL);
 
+
         WebAppCalls.invokeWebapp_GET(getApplicationContext(), params, GlobalConstants.PATH_REGISTER);
 //        Log.d("benchlab", "first:" + uuid);
 //        writeToFile(GlobalConstants.getInstance().getBenchlabDirName() + "meta.txt", uuid);
@@ -94,6 +95,7 @@ public class RegisterActivity extends ActionBarActivity {
 
             params = new RequestParams();
             try {
+                params.put("deviceid", GlobalConstants.getConstantDeviceID());
                 params.put("key", new File(GlobalConstants.getInstance().getBenchlabDirName() + "id_rsa.pk"), "multipart/form-data");
             } catch (FileNotFoundException ex) {
                 ex.printStackTrace();
@@ -123,6 +125,7 @@ public class RegisterActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 RequestParams params = new RequestParams();
+                params.put("deviceID",GlobalConstants.getConstantDeviceID());
                 String trace_file_name = GlobalConstants.getBenchlabDirName() + "trace.txt";
                 File trace = new File(trace_file_name);
                 try {

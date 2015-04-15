@@ -31,6 +31,7 @@ public class MainActivity extends Activity {
 
     private Button start;
     private Button register;
+    private Button results;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +43,7 @@ public class MainActivity extends Activity {
 
         start = (Button) findViewById(R.id.start);
         register = (Button) findViewById(R.id.register);
+        results = (Button) findViewById(R.id.results);
 
         GlobalConstants inst = GlobalConstants.getInstance();
         String experimentName = "expt_" + System.currentTimeMillis();
@@ -69,6 +71,16 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, RegisterActivity.class);
+                startActivity(intent);
+
+            }
+        });
+
+        results.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, ResultViews.class);
                 startActivity(intent);
 
             }

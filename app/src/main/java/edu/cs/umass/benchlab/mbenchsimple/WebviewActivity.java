@@ -1,5 +1,5 @@
 package edu.cs.umass.benchlab.mbenchsimple;
-
+import android.net.TrafficStats;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Random;
@@ -147,6 +147,7 @@ public class WebviewActivity extends Activity {
                 ExperimentList.getInstance();
                 /*Update end time*/
                 entity.setEnd(System.currentTimeMillis());
+                //entity.setBytes(TrafficStats.getUidRxBytes(Process.myUid()));
                 ExperimentResults.getInstance().updateResults(entity);
 
                 String urlfilename = ExperimentList.getInstance().getCurrentExpt().getTag();

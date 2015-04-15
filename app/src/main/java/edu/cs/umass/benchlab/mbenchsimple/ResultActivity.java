@@ -93,18 +93,13 @@ public class ResultActivity extends Activity {
         File encodedFile = encodeFile(zipfile);
         RequestParams params = new RequestParams();
 
-        params.put("deviceid", GlobalConstants.getConstantDeviceID());
-        params.put("os", ExperimentResults.getInstance().getPhoneData().getVersion());
-        params.put("location", ExperimentResults.getInstance().getPhoneData().getLocation());
-        params.put("ip", ExperimentResults.getInstance().getPhoneData().getIpAddress());
-
-        WebAppCalls.invokeWebapp_GET(getApplicationContext(), params,
-                GlobalConstants.PATH_UPLOAD_METADATA);
-
-
-        params = new RequestParams();
         try {
             params.put("result_zip", encodedFile, "multipart/form-data");
+            params.put("deviceid", GlobalConstants.getConstantDeviceID());
+            params.put("os", ExperimentResults.getInstance().getPhoneData().getVersion());
+            params.put("location", ExperimentResults.getInstance().getPhoneData().getLocation());
+            params.put("ip", ExperimentResults.getInstance().getPhoneData().getIpAddress());
+            params.put("exptNumber", GlobalConstants.getExperimentName());
 
         } catch (FileNotFoundException ex) {
             ex.printStackTrace();
