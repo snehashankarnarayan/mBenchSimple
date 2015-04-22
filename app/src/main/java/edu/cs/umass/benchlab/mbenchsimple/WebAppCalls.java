@@ -21,7 +21,6 @@ import org.apache.http.Header;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.google.gson.Gson;
 
 /**
  * Created by snehas on 2/23/15.
