@@ -23,4 +23,12 @@
         android:layout_below="@+id/start"
         android:layout_centerHorizontal="true" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="View Results"
+        android:id="@+id/results"
+        android:layout_below="@+id/register"
+        android:layout_centerHorizontal="true" />
+
 </RelativeLayout>

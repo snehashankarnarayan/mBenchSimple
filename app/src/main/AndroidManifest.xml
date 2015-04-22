@@ -46,6 +46,10 @@
             android:name="edu.cs.umass.benchlab.mbenchsimple.RegisterActivity"
             android:label="@string/title_activity_register" >
         </activity>
+        <activity
+            android:name="edu.cs.umass.benchlab.mbenchsimple.ResultViews"
+            android:label="@string/title_activity_result_views" >
+        </activity>
     </application>
 
 </manifest>
