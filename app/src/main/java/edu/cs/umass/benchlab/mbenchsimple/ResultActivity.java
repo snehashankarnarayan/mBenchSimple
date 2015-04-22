@@ -90,16 +90,18 @@ public class ResultActivity extends Activity {
     private void uploadZipToWebApp(String zipfilename) {
         //zipfilename = GlobalConstants.getInstance().getDirName() +  "results.csv";
         File zipfile = new File(zipfilename);
-        File encodedFile = encodeFile(zipfile);
+        //File encodedFile = encodeFile(zipfile);
+
         RequestParams params = new RequestParams();
 
         try {
-            params.put("result_zip", encodedFile, "multipart/form-data");
+            params.put("result_zip", zipfile, "multipart/form-data");
             params.put("deviceid", GlobalConstants.getConstantDeviceID());
             params.put("os", ExperimentResults.getInstance().getPhoneData().getVersion());
             params.put("location", ExperimentResults.getInstance().getPhoneData().getLocation());
             params.put("ip", ExperimentResults.getInstance().getPhoneData().getIpAddress());
             params.put("exptNumber", GlobalConstants.getExperimentName());
+            params.put("magicNumber", ExperimentResults.getInstance().getMagicNumber());
 
         } catch (FileNotFoundException ex) {
             ex.printStackTrace();

@@ -134,6 +134,7 @@ public class WebviewActivity extends Activity {
                 entity.setUrl(expt.getURL());
                 entity.setTag(expt.getTag());
 
+                /*Fix this!*/
                 Log.d("benchlab", expt.getTag() + ":" + url);
             }
 
@@ -147,7 +148,9 @@ public class WebviewActivity extends Activity {
                 ExperimentList.getInstance();
                 /*Update end time*/
                 entity.setEnd(System.currentTimeMillis());
-                //entity.setBytes(TrafficStats.getUidRxBytes(Process.myUid()));
+                /*Gives bytes downloaded from startup. DO NOT use this!*/
+                //entity.setBytes(TrafficStats.getUidRxBytes(android.os.Process.myUid()));
+
                 ExperimentResults.getInstance().updateResults(entity);
 
                 String urlfilename = ExperimentList.getInstance().getCurrentExpt().getTag();

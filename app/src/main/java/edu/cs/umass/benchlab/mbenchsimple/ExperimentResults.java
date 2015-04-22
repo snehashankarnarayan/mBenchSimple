@@ -9,6 +9,7 @@ public class ExperimentResults {
     private static ExperimentResults instance = null;
     private static PhoneExperimentData phoneData;
     private static LinkedList<ResultEntity> results;
+    private static double magicNumber = 0;
 
     public static ExperimentResults getInstance() {
         if (instance == null) {
@@ -43,6 +44,10 @@ public class ExperimentResults {
     public LinkedList<ResultEntity> getResults() {
         return results;
     }
+
+    public static double getMagicNumber() { return  magicNumber;}
+
+    public static void setMagicNumber(double mn) { magicNumber = mn; }
 
 
 }
