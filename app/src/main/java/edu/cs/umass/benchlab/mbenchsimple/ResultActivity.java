@@ -178,6 +178,8 @@ public class ResultActivity extends Activity {
 
         table.addView(rowTitle);
 
+        double mn = 0;
+
         for (ResultEntity res : results) {
             TableRow row = new TableRow(this);
             row.setGravity(Gravity.CENTER);
@@ -195,8 +197,11 @@ public class ResultActivity extends Activity {
             row.addView(rowLatency);
 
             table.addView(row);
+            mn += res.getLatency();
         }
 
+        mn = mn/results.size();
+        ExperimentResults.getInstance().setMagicNumber(mn);
         TableRow exitRow = new TableRow(this);
         exitRow.setGravity(Gravity.CENTER_HORIZONTAL);
         exit = new Button(this);

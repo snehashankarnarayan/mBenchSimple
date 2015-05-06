@@ -74,13 +74,13 @@ public class WebAppCalls {
                         Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show();
                         Log.d("benchlab", "Success");
 
-                        try {
-                            json = new JSONObject(new String(b));
-                            writeToFile(GlobalConstants.getInstance().getBenchlabDirName() + "meta.txt", json.getString("uuid"));
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+//                        try {
+//                            json = new JSONObject(new String(b));
+//                            //writeToFile(GlobalConstants.getInstance().getBenchlabDirName() + "meta.txt", json.getString("uuid"));
+//
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
 
                     }
 
