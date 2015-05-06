@@ -202,6 +202,16 @@ public class ResultActivity extends Activity {
 
         mn = mn/results.size();
         ExperimentResults.getInstance().setMagicNumber(mn);
+
+        TableRow mnRow = new TableRow(this);
+        mnRow.setGravity(Gravity.CENTER_HORIZONTAL);
+        TextView mnView = new TextView(this);
+        mnView.setText("Your score: " + mn);
+        mnView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+        mnView.setGravity(Gravity.CENTER_HORIZONTAL);
+        mnRow.addView(mnView);
+        table.addView(mnRow);
+
         TableRow exitRow = new TableRow(this);
         exitRow.setGravity(Gravity.CENTER_HORIZONTAL);
         exit = new Button(this);

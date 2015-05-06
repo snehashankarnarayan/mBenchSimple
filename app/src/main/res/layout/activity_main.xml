@@ -13,7 +13,8 @@
         android:layout_below="@+id/textView1"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="41dp"
-        android:text="Start Experiment" />
+        android:text="Start Experiment"
+        android:visibility="invisible" />
 
     <Button
         android:layout_width="wrap_content"
@@ -21,7 +22,8 @@
         android:text="Register Device"
         android:id="@+id/register"
         android:layout_below="@+id/start"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:visibility="invisible" />
 
     <Button
         android:layout_width="wrap_content"
@@ -29,6 +31,7 @@
         android:text="View Results"
         android:id="@+id/results"
         android:layout_below="@+id/register"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:visibility="invisible" />
 
 </RelativeLayout>
