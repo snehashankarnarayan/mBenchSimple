@@ -26,7 +26,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Location:"
+        android:text="IP:"
         android:id="@+id/IPLabel"
         android:layout_below="@+id/LocationLabel"/>
 
@@ -51,6 +51,7 @@
         android:id="@+id/IPValue"
         android:layout_below="@+id/LocationLabel"
         android:layout_toRightOf="@+id/IPLabel"
+        android:layout_marginBottom="@dimen/abc_action_bar_icon_vertical_padding"
         android:text="Amherst, MA" />
 
     <Button

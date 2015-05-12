@@ -15,6 +15,8 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.view.View;
+import android.view.MotionEvent;
 import android.util.Log;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -29,9 +31,11 @@ public class WebviewActivity extends Activity {
         public void run() {
 
             ExperimentList expt = ExperimentList.getInstance();
-            String url = expt.getURL();
+            String url;
 
             while (true) {
+                url = expt.getURL();
+                Log.d("benchlab","getting url in run " + url);
                 try {
                     Thread.sleep(5000);
                 } catch (InterruptedException e) {
@@ -48,7 +52,7 @@ public class WebviewActivity extends Activity {
                     break;
                 }
 
-                url = expt.getURL();
+                //url = expt.getURL();
             }
         }
     }
@@ -61,6 +65,7 @@ public class WebviewActivity extends Activity {
         String url = expt.getURL();
 
         if (url != "null") {
+            Log.d("benchlab","from load page");
             browser.loadUrl(url);
         } else {
             Intent intent = new Intent(WebviewActivity.this, ResultActivity.class);
@@ -75,6 +80,16 @@ public class WebviewActivity extends Activity {
         setContentView(R.layout.activity_webview);
 
         browser = (WebView) findViewById(R.id.browser);
+        browser.getSettings().setJavaScriptEnabled(false);
+        browser.setEnabled(false);
+        browser.setClickable(false);
+
+        browser.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;
+            }
+        });
 
         loadPage();
         registerClient();
@@ -84,6 +99,9 @@ public class WebviewActivity extends Activity {
             public void handleMessage(Message msg) {
                 String url = (String) msg.obj;
                 if (url != "null") {
+                    Log.d("benchlab","from handler page " + url);
+                    browser.setEnabled(false);
+                    browser.setClickable(false);
                     browser.loadUrl(url);
                 } else {
                     Intent intent = new Intent(WebviewActivity.this, ResultActivity.class);
@@ -99,31 +117,11 @@ public class WebviewActivity extends Activity {
 
     }
 
-    /*private String getUrlFileName(String url)
-    {
-        String[] list = url.split("[./:]");
-        String name;
-
-        Random rn = new Random();
-        name = "tempname" + rn.nextInt(100);
-
-        for(int i = 0 ;i < list.length - 1; i++)
-        {
-            if(!list[i].contains("http") && !list[i].contains("www")
-                    && !list[i].contains("com") && list[i].length() != 1 && list[i] != null)
-            {
-                name = list[i];
-                Log.d("benchlab" , "taking " + i + "list " + list[i]);
-            }
-        }
-
-        Log.d("benchlab" , name + "****" + url);
-        return name;
-    }*/
     private void registerClient() {
         browser.setWebViewClient(new WebViewClient() {
 
             ResultEntity entity;
+
 
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {

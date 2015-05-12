@@ -17,7 +17,7 @@ public class GlobalConstants {
     public static final String PATH_KEY = WEBAPP_PATH + "/registerdevice/upload_key";
     public static final String PATH_GET_TRACE = WEBAPP_PATH + "/tracemanagement/get_latest_trace";
     //public static final String IP_WEBAPP = "10.0.0.29:9998";
-    public static final String IP_WEBAPP = "10.3.40.226:9998";
+    public static final String IP_WEBAPP = "obelix.cs.umass.edu:8123";
 
 
     public static GlobalConstants getInstance() {

@@ -180,7 +180,8 @@ public class ResultActivity extends Activity {
 
         double mn = 0;
 
-        for (ResultEntity res : results) {
+        for (int i=0; i < results.size()-1; i++) {
+            ResultEntity res = results.get(i);
             TableRow row = new TableRow(this);
             row.setGravity(Gravity.CENTER);
 

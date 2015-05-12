@@ -77,6 +77,10 @@ public class ExperimentList {
             e.printStackTrace();
         }
 
+        for(ExperimentEntity ex:expt)
+        {
+            System.out.println(ex.getTag() + ex.getURL());
+        }
         numTests = expt.size();
 
     }
@@ -86,9 +90,11 @@ public class ExperimentList {
     }
 
     public String getURL() {
+
         if (counter < numTests) {
             String url = expt.get(counter).getURL();
             counter = counter + 1;
+            Log.d("benchlab","Getting url " + url);
             return url;
         }
 
@@ -97,8 +103,10 @@ public class ExperimentList {
 
     public ExperimentEntity getCurrentExpt() {
         if (counter <= numTests) {
-            return expt.get(counter - 1);
-        } else
+            Log.d("benchlab","Expt counter " + expt.get(counter-2).getTag());
+            return expt.get(counter - 2);
+        }
+        else
             return null;
     }
 
