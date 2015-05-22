@@ -248,6 +248,7 @@ public class ResultActivity extends Activity {
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 finish();
+                System.exit(0);
                 //android.os.Process.killProcess(android.os.Process.myPid());
                 //super.onDestroy();
 

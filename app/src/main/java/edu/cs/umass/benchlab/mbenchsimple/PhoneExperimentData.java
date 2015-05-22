@@ -9,6 +9,12 @@ public class PhoneExperimentData {
     private String location;
     private String ipAddress;
 
+    PhoneExperimentData() {
+        this.version = "default";
+        this.location = "default";
+        this.ipAddress = "default";
+    }
+
     public void setVersion(String data) {
         this.version = data;
     }

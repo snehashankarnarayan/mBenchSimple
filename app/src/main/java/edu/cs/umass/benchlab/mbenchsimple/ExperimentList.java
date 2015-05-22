@@ -12,23 +12,6 @@ public class ExperimentList {
 
     private static ExperimentList instance = null;
     private static int numTests = 0;
-    /*private static String[] urls = {
-
-		"http://www.google.com",
-		"http://www.facebook.com",
-		"http://www.umass.edu",
-		"http://www.yahoo.com",
-		"http://www.cnn.com",
-		"http://www.isro.org"
-		/*"www.wikipedia.org",
-		"www.amazon.com",
-		"www.twitter.com",
-		"www.qq.com",
-		"www.taobao.com",
-		"www.linkedin.com",
-		"www.google.co.in",
-		"www.live.com",
-	};*/
 
     private static boolean[] done;
     private static int counter = 0;

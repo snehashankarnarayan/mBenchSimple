@@ -181,7 +181,14 @@ public class MainActivity extends Activity {
 
         boolean regCheck = checkFile();
 
+        boolean netCheck = WebAppCalls.checkInternet(getApplicationContext());
+        if(!netCheck) {
+            Toast.makeText(getApplicationContext(),"Cannot connect to internet", Toast.LENGTH_LONG).show();
+            System.exit(0);
+        }
+
         if(!regCheck) {
+            WebAppCalls.firstCheckWebApp(getApplicationContext());
             Toast.makeText(getApplicationContext(), "Registering device...", Toast.LENGTH_LONG).show();
             registerUuid();
             RequestParams params = new RequestParams();

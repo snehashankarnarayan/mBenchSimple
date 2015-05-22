@@ -23,7 +23,7 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name="edu.cs.umass.benchlab.mbenchsimple.MainActivity"
-            android:label="Welcome to Mobile Benchlab" >
+            android:label="Mobile Benchlab" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

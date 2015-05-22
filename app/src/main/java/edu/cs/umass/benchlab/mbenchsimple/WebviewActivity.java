@@ -87,7 +87,7 @@ public class WebviewActivity extends Activity {
         browser.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                return true;
+                return(event.getAction() == MotionEvent.ACTION_MOVE);
             }
         });
 
