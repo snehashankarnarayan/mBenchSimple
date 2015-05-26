@@ -81,6 +81,7 @@ public class ConfigActivity extends ActionBarActivity {
 
                 Intent intent = new Intent(ConfigActivity.this, WebviewActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 

@@ -243,11 +243,7 @@ public class ResultActivity extends Activity {
             public void onClick(View v) {
                 // TODO Auto-generated method stub
 
-                Intent intent = new Intent(Intent.ACTION_MAIN);
-                intent.addCategory(Intent.CATEGORY_HOME);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                finish();
+
                 System.exit(0);
                 //android.os.Process.killProcess(android.os.Process.myPid());
                 //super.onDestroy();
